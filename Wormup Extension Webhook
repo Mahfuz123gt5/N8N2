@@ -1,0 +1,2715 @@
+{
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "extention",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [
+        -288,
+        0
+      ],
+      "id": "b6b6eb67-5f59-45ec-bc71-a8a14265d7ed",
+      "name": "Webhook",
+      "webhookId": "829a8bdb-8c71-4e70-a7b9-42dc60baebd2"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "loose",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "c89b8b1a-166d-41d0-b641-bfb180bd9985",
+              "leftValue": "=To: {{ $('Get row').item.json['Email + Password'] }}",
+              "rightValue": "={{ $json.headers.to }}",
+              "operator": {
+                "type": "string",
+                "operation": "contains"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "looseTypeValidation": true,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        992,
+        -192
+      ],
+      "id": "457b052e-78e9-4897-8dcd-2f8505c8a4de",
+      "name": "If"
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "loose",
+                  "version": 3
+                },
+                "conditions": [
+                  {
+                    "id": "fb5a91f6-50a2-4434-89bb-b0ae2bb6fa3d",
+                    "leftValue": "G_url",
+                    "rightValue": "={{ $json.body.action }}",
+                    "operator": {
+                      "type": "string",
+                      "operation": "contains"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              }
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "loose",
+                  "version": 3
+                },
+                "conditions": [
+                  {
+                    "leftValue": "G_data",
+                    "rightValue": "={{ $json.body.action }}",
+                    "operator": {
+                      "type": "string",
+                      "operation": "contains"
+                    },
+                    "id": "00bd7b62-6fe9-40e2-b44a-5974d90751cb"
+                  }
+                ],
+                "combinator": "and"
+              }
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "loose",
+                  "version": 3
+                },
+                "conditions": [
+                  {
+                    "id": "48f345fd-e40b-4c90-b225-686b4318c4d2",
+                    "leftValue": "=S_data",
+                    "rightValue": "={{ $json.body.action }}",
+                    "operator": {
+                      "type": "string",
+                      "operation": "contains"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              }
+            }
+          ]
+        },
+        "looseTypeValidation": true,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.4,
+      "position": [
+        -64,
+        -16
+      ],
+      "id": "83828c51-8503-408d-af8a-fe01f3c30670",
+      "name": "Switch"
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.limit",
+      "typeVersion": 1,
+      "position": [
+        752,
+        -16
+      ],
+      "id": "b4f4c826-74b2-43b4-8eee-64e4e0ca671a",
+      "name": "Limit"
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "11wR54Q5uBbIq_59pn1Klk0L6ddWZZfN6ERBqLMYkTr4",
+          "mode": "list",
+          "cachedResultName": "WarmUpInbox",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/11wR54Q5uBbIq_59pn1Klk0L6ddWZZfN6ERBqLMYkTr4/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 1250715471,
+          "mode": "list",
+          "cachedResultName": "Sheet2",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/11wR54Q5uBbIq_59pn1Klk0L6ddWZZfN6ERBqLMYkTr4/edit#gid=1250715471"
+        },
+        "filtersUI": {
+          "values": [
+            {
+              "lookupColumn": "Status",
+              "lookupValue": "-"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        512,
+        -16
+      ],
+      "id": "2cec4f63-259b-44ba-9547-eb4af3bac751",
+      "name": "Get Data",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "49vtSxmzdUHWW3OF",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "appendOrUpdate",
+        "documentId": {
+          "__rl": true,
+          "value": "11wR54Q5uBbIq_59pn1Klk0L6ddWZZfN6ERBqLMYkTr4",
+          "mode": "list",
+          "cachedResultName": "WarmUpInbox",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/11wR54Q5uBbIq_59pn1Klk0L6ddWZZfN6ERBqLMYkTr4/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 1250715471,
+          "mode": "list",
+          "cachedResultName": "Sheet2",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/11wR54Q5uBbIq_59pn1Klk0L6ddWZZfN6ERBqLMYkTr4/edit#gid=1250715471"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Api": "={{ $json.body.api }}",
+            "Email + Password": "={{ $json.body.email }}",
+            "Status": "={{ $json.body.status }}",
+            "Time": "={{ $json.body.time }}"
+          },
+          "matchingColumns": [
+            "Email + Password"
+          ],
+          "schema": [
+            {
+              "id": "Email + Password",
+              "displayName": "Email + Password",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Status",
+              "displayName": "Status",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "First Name",
+              "displayName": "First Name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Last name",
+              "displayName": "Last name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Email 01568-055884",
+              "displayName": "Email 01568-055884",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "App Password",
+              "displayName": "App Password",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Api",
+              "displayName": "Api",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Last send",
+              "displayName": "Last send",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "inbox_id",
+              "displayName": "inbox_id",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Time",
+              "displayName": "Time",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "status",
+              "displayName": "status",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "score",
+              "displayName": "score",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "identifier",
+              "displayName": "identifier",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "strategy",
+              "displayName": "strategy",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Day 1",
+              "displayName": "Day 1",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Day 2",
+              "displayName": "Day 2",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Day 3",
+              "displayName": "Day 3",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Day 4",
+              "displayName": "Day 4",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Day 5",
+              "displayName": "Day 5",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Day 6",
+              "displayName": "Day 6",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Day 7",
+              "displayName": "Day 7",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        512,
+        176
+      ],
+      "id": "7bece4b5-7d1d-4b44-a23b-2245aaad97e8",
+      "name": "Add Data",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "49vtSxmzdUHWW3OF",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "getAll",
+        "returnAll": true,
+        "simple": false,
+        "filters": {
+          "labelIds": [
+            "Label_2204985528766821112"
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.2,
+      "position": [
+        752,
+        -192
+      ],
+      "id": "5aa7afb2-4de3-467b-82c3-167993d2bdb0",
+      "name": "Get Email",
+      "webhookId": "7b3dd57e-2074-4a91-b558-3845610512a9",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "T3B0MwNPVMUY5lDn",
+          "name": "Gmail account 2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "mode": "runOnceForEachItem",
+        "jsCode": "const htmlContent = $input.item.json.html;\n\n// Regex to capture the URL inside the href attribute\nconst linkMatch = htmlContent.match(/href=\"([^\"]*verify[^\"]*)\"/);\n\n// Assign the extracted link to a new field\nreturn {\n  extractedUrl: linkMatch ? linkMatch[1].replace(/&amp;/g, '&') : null\n};"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1232,
+        -192
+      ],
+      "id": "42887ed0-3b9c-4235-8978-be7f5366aac2",
+      "name": "Stack Url"
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={\n  \"confirm_url\": \"{{ $json.extractedUrl }}\"\n}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.5,
+      "position": [
+        1456,
+        -192
+      ],
+      "id": "ac68d74b-81fe-4290-84e1-a8c7f9372d3b",
+      "name": "Send Url"
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={\n  \"first_name\": \"{{ $json['First Name'] }}\",\n  \"last_name\": \"{{ $json['Last name'] }}\",\n  \"email\": \"{{ $json['Email + Password'] }}\",\n  \"password\": \"{{ $json['Email + Password'] }}\"\n} ",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.5,
+      "position": [
+        992,
+        -16
+      ],
+      "id": "3e8dd797-6984-4701-b044-e9c355d1786a",
+      "name": "Send Data"
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "{\n  \"action\": \"Complete\",\n  \"action\": \"Stop\"\n}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.5,
+      "position": [
+        752,
+        176
+      ],
+      "id": "eacb8653-a313-4db6-8c21-5dde9b0154b5",
+      "name": "Respond to Webhook"
+    },
+    {
+      "parameters": {
+        "operation": "appendOrUpdate",
+        "documentId": {
+          "__rl": true,
+          "value": "11wR54Q5uBbIq_59pn1Klk0L6ddWZZfN6ERBqLMYkTr4",
+          "mode": "list",
+          "cachedResultName": "WarmUpInbox",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/11wR54Q5uBbIq_59pn1Klk0L6ddWZZfN6ERBqLMYkTr4/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 1250715471,
+          "mode": "list",
+          "cachedResultName": "Sheet2",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/11wR54Q5uBbIq_59pn1Klk0L6ddWZZfN6ERBqLMYkTr4/edit#gid=1250715471"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Status": "--",
+            "Email + Password": "={{ $json['Email + Password'] }}"
+          },
+          "matchingColumns": [
+            "Email + Password"
+          ],
+          "schema": [
+            {
+              "id": "Email + Password",
+              "displayName": "Email + Password",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Status",
+              "displayName": "Status",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "First Name",
+              "displayName": "First Name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Last name",
+              "displayName": "Last name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Email 01568-055884",
+              "displayName": "Email 01568-055884",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "App Password",
+              "displayName": "App Password",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Api",
+              "displayName": "Api",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Last send",
+              "displayName": "Last send",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "inbox_id",
+              "displayName": "inbox_id",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Time",
+              "displayName": "Time",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "status",
+              "displayName": "status",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "score",
+              "displayName": "score",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "identifier",
+              "displayName": "identifier",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "strategy",
+              "displayName": "strategy",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Day 1",
+              "displayName": "Day 1",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Day 2",
+              "displayName": "Day 2",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Day 3",
+              "displayName": "Day 3",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Day 4",
+              "displayName": "Day 4",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Day 5",
+              "displayName": "Day 5",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Day 6",
+              "displayName": "Day 6",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Day 7",
+              "displayName": "Day 7",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        1200,
+        -16
+      ],
+      "id": "550b6d51-b81e-4aee-8d55-6c2cfa248b06",
+      "name": "Append or update row in sheet",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "49vtSxmzdUHWW3OF",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "11wR54Q5uBbIq_59pn1Klk0L6ddWZZfN6ERBqLMYkTr4",
+          "mode": "list",
+          "cachedResultName": "WarmUpInbox",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/11wR54Q5uBbIq_59pn1Klk0L6ddWZZfN6ERBqLMYkTr4/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 1250715471,
+          "mode": "list",
+          "cachedResultName": "Sheet2",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/11wR54Q5uBbIq_59pn1Klk0L6ddWZZfN6ERBqLMYkTr4/edit#gid=1250715471"
+        },
+        "filtersUI": {
+          "values": [
+            {
+              "lookupColumn": "Status",
+              "lookupValue": "--"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        512,
+        -192
+      ],
+      "id": "c491e337-3d72-42d4-8b76-ff26728592d2",
+      "name": "Get row",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "49vtSxmzdUHWW3OF",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "url": "=https://api.warmupinbox.com/v1/inboxes/{{ $json.inbox_id }}",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "accept",
+              "value": "application/json"
+            },
+            {
+              "name": "x-api-key",
+              "value": "={{ $json.Api }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        944,
+        752
+      ],
+      "id": "b6ef9d4b-b857-4d3d-9d14-b6ccc24ddb0e",
+      "name": "Inbox Details"
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "11wR54Q5uBbIq_59pn1Klk0L6ddWZZfN6ERBqLMYkTr4",
+          "mode": "list",
+          "cachedResultName": "WarmUpInbox",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/11wR54Q5uBbIq_59pn1Klk0L6ddWZZfN6ERBqLMYkTr4/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 1250715471,
+          "mode": "list",
+          "cachedResultName": "Sheet2",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/11wR54Q5uBbIq_59pn1Klk0L6ddWZZfN6ERBqLMYkTr4/edit#gid=1250715471"
+        },
+        "filtersUI": {
+          "values": [
+            {
+              "lookupColumn": "Status",
+              "lookupValue": "Ok"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        512,
+        752
+      ],
+      "id": "2efb7709-6151-46de-97e2-9ee22187b370",
+      "name": "Get row(s) in sheet",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "49vtSxmzdUHWW3OF",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "11wR54Q5uBbIq_59pn1Klk0L6ddWZZfN6ERBqLMYkTr4",
+          "mode": "list",
+          "cachedResultName": "WarmUpInbox",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/11wR54Q5uBbIq_59pn1Klk0L6ddWZZfN6ERBqLMYkTr4/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 1250715471,
+          "mode": "list",
+          "cachedResultName": "Sheet2",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/11wR54Q5uBbIq_59pn1Klk0L6ddWZZfN6ERBqLMYkTr4/edit#gid=1250715471"
+        },
+        "filtersUI": {
+          "values": [
+            {
+              "lookupColumn": "Status",
+              "lookupValue": "successful"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        512,
+        528
+      ],
+      "id": "73967068-b477-47a0-94d4-81d2696503d2",
+      "name": "Get row(s) in sheet1",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "49vtSxmzdUHWW3OF",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.warmupinbox.com/v1/inboxes",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "accept",
+              "value": "application/json"
+            },
+            {
+              "name": "x-api-key",
+              "value": "={{ $json.Api }}"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"email\": \"{{ $json['Email 01568-055884'] }}\",\n  \"password\": \"{{ $json['App Password'] }}\",\n  \"sender_first\": \"{{ $json['First Name'] }}\",\n  \"sender_last\": \"{{ $json['Last name'] }}\",\n  \"plan\": \"pro\",\n  \"frequency\": {\n    \"starting_baseline\": {{ $json['Last send'] }},\n    \"increase_per_day\": 6,\n    \"max_sends_per_day\": 250,\n    \"reply_rate\": 45\n  },\n  \"timezone\": \"America/New_York\"\n} ",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        944,
+        528
+      ],
+      "id": "2215d7f3-5802-4eb4-948a-95781c7bf092",
+      "name": "Create Inbox1"
+    },
+    {
+      "parameters": {
+        "operation": "appendOrUpdate",
+        "documentId": {
+          "__rl": true,
+          "value": "11wR54Q5uBbIq_59pn1Klk0L6ddWZZfN6ERBqLMYkTr4",
+          "mode": "list",
+          "cachedResultName": "WarmUpInbox",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/11wR54Q5uBbIq_59pn1Klk0L6ddWZZfN6ERBqLMYkTr4/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 1250715471,
+          "mode": "list",
+          "cachedResultName": "Sheet2",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/11wR54Q5uBbIq_59pn1Klk0L6ddWZZfN6ERBqLMYkTr4/edit#gid=1250715471"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "inbox_id": "={{ $json.inbox_id }}",
+            "Status": "Ok",
+            "Email 01568-055884": "={{ $('Get row(s) in sheet1').item.json['Email 01568-055884'] }}"
+          },
+          "matchingColumns": [
+            "Email 01568-055884"
+          ],
+          "schema": [
+            {
+              "id": "Email + Password",
+              "displayName": "Email + Password",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Status",
+              "displayName": "Status",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "First Name",
+              "displayName": "First Name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Last name",
+              "displayName": "Last name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Email 01568-055884",
+              "displayName": "Email 01568-055884",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "App Password",
+              "displayName": "App Password",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Api",
+              "displayName": "Api",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Last send",
+              "displayName": "Last send",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "inbox_id",
+              "displayName": "inbox_id",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Time",
+              "displayName": "Time",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "status",
+              "displayName": "status",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "score",
+              "displayName": "score",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "identifier",
+              "displayName": "identifier",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "strategy",
+              "displayName": "strategy",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Day 1",
+              "displayName": "Day 1",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Day 2",
+              "displayName": "Day 2",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Day 3",
+              "displayName": "Day 3",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Day 4",
+              "displayName": "Day 4",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Day 5",
+              "displayName": "Day 5",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Day 6",
+              "displayName": "Day 6",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Day 7",
+              "displayName": "Day 7",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        1200,
+        528
+      ],
+      "id": "dde25dfd-57d1-46de-bffb-340c1dfe8207",
+      "name": "Append or update row in sheet1",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "49vtSxmzdUHWW3OF",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 3,
+      "position": [
+        720,
+        752
+      ],
+      "id": "20130d3c-9a10-4150-83ea-461242b6efad",
+      "name": "Loop Over Items"
+    },
+    {
+      "parameters": {
+        "operation": "appendOrUpdate",
+        "documentId": {
+          "__rl": true,
+          "value": "11wR54Q5uBbIq_59pn1Klk0L6ddWZZfN6ERBqLMYkTr4",
+          "mode": "list",
+          "cachedResultName": "WarmUpInbox",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/11wR54Q5uBbIq_59pn1Klk0L6ddWZZfN6ERBqLMYkTr4/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 1250715471,
+          "mode": "list",
+          "cachedResultName": "Sheet2",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/11wR54Q5uBbIq_59pn1Klk0L6ddWZZfN6ERBqLMYkTr4/edit#gid=1250715471"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "inbox_id": "={{ $json.inbox_id }}",
+            "status": "={{ $json.status }}",
+            "score": "={{ $json.score }}",
+            "identifier": "={{ $json.identifier }}",
+            "strategy": "={{ $json.frequency.strategy }}"
+          },
+          "matchingColumns": [
+            "inbox_id"
+          ],
+          "schema": [
+            {
+              "id": "Email + Password",
+              "displayName": "Email + Password",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Status",
+              "displayName": "Status",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "First Name",
+              "displayName": "First Name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Last name",
+              "displayName": "Last name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Email 01568-055884",
+              "displayName": "Email 01568-055884",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "App Password",
+              "displayName": "App Password",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Api",
+              "displayName": "Api",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Last send",
+              "displayName": "Last send",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "inbox_id",
+              "displayName": "inbox_id",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Time",
+              "displayName": "Time",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "status",
+              "displayName": "status",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "score",
+              "displayName": "score",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "identifier",
+              "displayName": "identifier",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "strategy",
+              "displayName": "strategy",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Day 1",
+              "displayName": "Day 1",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Day 2",
+              "displayName": "Day 2",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Day 3",
+              "displayName": "Day 3",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Day 4",
+              "displayName": "Day 4",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Day 5",
+              "displayName": "Day 5",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Day 6",
+              "displayName": "Day 6",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Day 7",
+              "displayName": "Day 7",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        1200,
+        752
+      ],
+      "id": "8df194da-a99a-4364-9129-8aee6fcdae25",
+      "name": "Append or update row in sheet2",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "49vtSxmzdUHWW3OF",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 3,
+      "position": [
+        720,
+        528
+      ],
+      "id": "298d526f-4c75-4fea-a838-661c6d3e08eb",
+      "name": "Loop Over Items1"
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "11wR54Q5uBbIq_59pn1Klk0L6ddWZZfN6ERBqLMYkTr4",
+          "mode": "list",
+          "cachedResultName": "WarmUpInbox",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/11wR54Q5uBbIq_59pn1Klk0L6ddWZZfN6ERBqLMYkTr4/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 1250715471,
+          "mode": "list",
+          "cachedResultName": "Sheet2",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/11wR54Q5uBbIq_59pn1Klk0L6ddWZZfN6ERBqLMYkTr4/edit#gid=1250715471"
+        },
+        "filtersUI": {
+          "values": [
+            {
+              "lookupColumn": "Status",
+              "lookupValue": "Ok"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        512,
+        992
+      ],
+      "id": "f7d5cfd3-df2b-4fbe-aac3-5e7db2beb782",
+      "name": "Get row(s) in sheet2",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "49vtSxmzdUHWW3OF",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 3,
+      "position": [
+        720,
+        992
+      ],
+      "id": "3014c196-5403-4342-8d91-8015faeb7ee3",
+      "name": "Loop Over Items2"
+    },
+    {
+      "parameters": {
+        "operation": "appendOrUpdate",
+        "documentId": {
+          "__rl": true,
+          "value": "11wR54Q5uBbIq_59pn1Klk0L6ddWZZfN6ERBqLMYkTr4",
+          "mode": "list",
+          "cachedResultName": "WarmUpInbox",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/11wR54Q5uBbIq_59pn1Klk0L6ddWZZfN6ERBqLMYkTr4/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 1250715471,
+          "mode": "list",
+          "cachedResultName": "Sheet2",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/11wR54Q5uBbIq_59pn1Klk0L6ddWZZfN6ERBqLMYkTr4/edit#gid=1250715471"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "inbox_id": "={{ $('Get row(s) in sheet2').item.json.inbox_id }}",
+            "Day 1": "={{ $json.schedule_metrics[0].queued }},{{ $json.schedule_metrics[0].inbox }},{{ $json.schedule_metrics[0].category }},{{ $json.schedule_metrics[0].spam }},{{ $json.schedule_metrics[0].date }}",
+            "Day 2": "={{ $json.schedule_metrics[1].queued }},{{ $json.schedule_metrics[1].inbox }},{{ $json.schedule_metrics[1].category }},{{ $json.schedule_metrics[1].spam }},{{ $json.schedule_metrics[1].date }}",
+            "Day 3": "={{ $json.schedule_metrics[2].queued }},{{ $json.schedule_metrics[2].inbox }},{{ $json.schedule_metrics[2].category }},{{ $json.schedule_metrics[2].spam }},{{ $json.schedule_metrics[2].date }}",
+            "Day 4": "={{ $json.schedule_metrics[3].queued }},{{ $json.schedule_metrics[3].inbox }},{{ $json.schedule_metrics[3].category }},{{ $json.schedule_metrics[3].spam }},{{ $json.schedule_metrics[3].date }}",
+            "Day 5": "={{ $json.schedule_metrics[4].queued }},{{ $json.schedule_metrics[4].inbox }},{{ $json.schedule_metrics[4].category }},{{ $json.schedule_metrics[4].spam }},{{ $json.schedule_metrics[4].date }}",
+            "Day 6": "={{ $json.schedule_metrics[5].queued }},{{ $json.schedule_metrics[5].inbox }},{{ $json.schedule_metrics[5].category }},{{ $json.schedule_metrics[5].spam }},{{ $json.schedule_metrics[5].date }}",
+            "Day 7": "={{ $json.schedule_metrics[6].queued }},{{ $json.schedule_metrics[6].inbox }},{{ $json.schedule_metrics[6].category }},{{ $json.schedule_metrics[6].spam }},{{ $json.schedule_metrics[6].date }}"
+          },
+          "matchingColumns": [
+            "inbox_id"
+          ],
+          "schema": [
+            {
+              "id": "Email + Password",
+              "displayName": "Email + Password",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Status",
+              "displayName": "Status",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "First Name",
+              "displayName": "First Name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Last name",
+              "displayName": "Last name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Email 01568-055884",
+              "displayName": "Email 01568-055884",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "App Password",
+              "displayName": "App Password",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Api",
+              "displayName": "Api",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Last send",
+              "displayName": "Last send",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "inbox_id",
+              "displayName": "inbox_id",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Time",
+              "displayName": "Time",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "status",
+              "displayName": "status",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "score",
+              "displayName": "score",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "identifier",
+              "displayName": "identifier",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "strategy",
+              "displayName": "strategy",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Day 1",
+              "displayName": "Day 1",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Day 2",
+              "displayName": "Day 2",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Day 3",
+              "displayName": "Day 3",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Day 4",
+              "displayName": "Day 4",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Day 5",
+              "displayName": "Day 5",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Day 6",
+              "displayName": "Day 6",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Day 7",
+              "displayName": "Day 7",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        1392,
+        992
+      ],
+      "id": "aac76fb0-8a1c-46b6-911a-4b2a5bd65571",
+      "name": "Append or update row in sheet3",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "49vtSxmzdUHWW3OF",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "url": "=https://api.warmupinbox.com/v1/inboxes/{{ $('Loop Over Items2').item.json.inbox_id }}/metrics ",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "from",
+              "value": "={{ $json.start_time_unix }}"
+            },
+            {
+              "name": "to",
+              "value": "={{ $json.end_time_unix }}"
+            }
+          ]
+        },
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "accept",
+              "value": "application/json"
+            },
+            {
+              "name": "x-api-key",
+              "value": "={{ $('Loop Over Items2').item.json.Api }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        1200,
+        992
+      ],
+      "id": "e3f304b2-7444-4c14-8133-7019a27e45b3",
+      "name": "Inbox Metrics"
+    },
+    {
+      "parameters": {
+        "jsCode": "// INPUT START TIME\nconst startInput = $json.Time || \"2026-05-15T13:35:45.157Z\";\n\n// CONVERT START TIME TO UNIX TIMESTAMP\nconst startTimestamp = Math.floor(\n  new Date(startInput).getTime() / 1000\n);\n\n// CURRENT TIME AS END TIME\nconst endTimestamp = Math.floor(Date.now() / 1000);\n\n// RETURN OUTPUT\nreturn {\n  json: {\n    start_time: startInput,\n    start_time_unix: startTimestamp,\n    end_time_unix: endTimestamp\n  }\n};"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        976,
+        992
+      ],
+      "id": "42700666-a35b-4bc2-a77d-65a8526ba94d",
+      "name": "Code in JavaScript"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Smart Warmup Logic\n// Format:\n// Queued,Inbox,Category,Spam,Date\n\nfor (const item of $input.all()) {\n\n    const days = [\n        item.json['Day 1'],\n        item.json['Day 2'],\n        item.json['Day 3'],\n        item.json['Day 4'],\n        item.json['Day 5'],\n        item.json['Day 6'],\n        item.json['Day 7']\n    ];\n\n    const validDays = [];\n\n    // সব valid day collect করা\n    for (const day of days) {\n        if (day && !day.includes(\",,,,\") && day.trim() !== \"\") {\n            validDays.push(day);\n        }\n    }\n\n    // Default output\n    let next_day_send_count = 10;\n    let daily_increase_rate = 0;\n    let reason = \"কোনো valid data পাওয়া যায়নি।\";\n\n    if (validDays.length > 0) {\n\n        const latestDay = validDays[validDays.length - 1];\n        const previousDay = validDays.length > 1 ? validDays[validDays.length - 2] : null;\n\n        const parseDay = (day) => {\n            const parts = day.split(',');\n            return {\n                queued: parseInt(parts[0]) || 0,\n                inbox: parseInt(parts[1]) || 0,\n                category: parseInt(parts[2]) || 0,\n                spam: parseInt(parts[3]) || 0,\n                date: parts.slice(4).join(',').trim()\n            };\n        };\n\n        const latest = parseDay(latestDay);\n        const previous = previousDay ? parseDay(previousDay) : null;\n\n        const latestOtherFilters = latest.queued + latest.category + latest.spam;\n        const previousOtherFilters = previous ? (previous.queued + previous.category + previous.spam) : null;\n\n        // Base send count = latest inbox\n        next_day_send_count = latest.inbox;\n\n        // যদি latest day-তে inbox ছাড়া অন্য কিছু থাকে, increase হবে না\n        if (latestOtherFilters > 0) {\n            daily_increase_rate = 0;\n            next_day_send_count = latest.inbox;\n            reason = `${latest.date} তারিখে Inbox ছাড়া অন্য filter দেখা গেছে, তাই increase বন্ধ রাখা হয়েছে।`;\n        }\n        else {\n            // Latest day clean\n            // এখন previous day-ও clean কিনা দেখা হবে\n            if (previous && previousOtherFilters === 0) {\n                // পরপর ২ দিন সব ঠিক থাকলে বেশি increase\n                daily_increase_rate = 10;\n                next_day_send_count = latest.inbox + 10;\n                reason = `${latest.date} এবং আগের দিন—দুই দিনই সবকিছু ঠিক ছিল, তাই বেশি increase করা হয়েছে।`;\n            } else {\n                // শুধু latest day clean হলে normal increase\n                daily_increase_rate = 5;\n                next_day_send_count = latest.inbox + 5;\n                reason = `${latest.date} তারিখে শুধু Inbox ছিল, তাই normal increase করা হয়েছে।`;\n            }\n        }\n    }\n\n    item.json.next_day_send_count = next_day_send_count;\n    item.json.daily_increase_rate = daily_increase_rate;\n    item.json.reason = reason;\n}\n\nreturn $input.all();"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1024,
+        1328
+      ],
+      "id": "be631377-3a2f-4aaf-89f4-35d2d364f48d",
+      "name": "Code in JavaScript1"
+    },
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "hours"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.3,
+      "position": [
+        -176,
+        768
+      ],
+      "id": "64be1994-e8cc-44fd-bde5-a663c7bf96f5",
+      "name": "Schedule Trigger"
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        -240,
+        1536
+      ],
+      "id": "2896e8d1-2f60-4775-bf03-b4073b61e171",
+      "name": "When clicking ‘Execute workflow’"
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "11wR54Q5uBbIq_59pn1Klk0L6ddWZZfN6ERBqLMYkTr4",
+          "mode": "list",
+          "cachedResultName": "WarmUpInbox",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/11wR54Q5uBbIq_59pn1Klk0L6ddWZZfN6ERBqLMYkTr4/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 1250715471,
+          "mode": "list",
+          "cachedResultName": "Sheet2",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/11wR54Q5uBbIq_59pn1Klk0L6ddWZZfN6ERBqLMYkTr4/edit#gid=1250715471"
+        },
+        "filtersUI": {
+          "values": [
+            {
+              "lookupColumn": "Status",
+              "lookupValue": "Ok"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        512,
+        1744
+      ],
+      "id": "5c987a64-68ea-4d47-a10b-baf6a8bef32b",
+      "name": "Get row(s) in sheet3",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "49vtSxmzdUHWW3OF",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "=https://api.warmupinbox.com/v1/inboxes/{{ $json.inbox_id }}/pause ",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "accept",
+              "value": "*/*"
+            },
+            {
+              "name": "x-api-key",
+              "value": "={{ $json.Api }}"
+            }
+          ]
+        },
+        "sendBody": true,
+        "contentType": "form-urlencoded",
+        "bodyParameters": {
+          "parameters": [
+            {}
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        1264,
+        1760
+      ],
+      "id": "bed0a441-35f0-42c7-a81d-0e021ada3066",
+      "name": "Pause Inbox"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "=https://api.warmupinbox.com/v1/inboxes/{{ $json.inbox_id }}/start ",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "accept",
+              "value": "*/*"
+            },
+            {
+              "name": "x-api-key",
+              "value": "={{ $json.Api }}"
+            }
+          ]
+        },
+        "sendBody": true,
+        "contentType": "form-urlencoded",
+        "bodyParameters": {
+          "parameters": [
+            {}
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        1232,
+        1552
+      ],
+      "id": "f99e9aaf-d3ac-4f13-a130-64ca5d46df0c",
+      "name": "Start Inbox"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 3,
+      "position": [
+        992,
+        1744
+      ],
+      "id": "142d4779-fa30-4d94-bfd2-228c96035668",
+      "name": "Loop Over Items3"
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "11wR54Q5uBbIq_59pn1Klk0L6ddWZZfN6ERBqLMYkTr4",
+          "mode": "list",
+          "cachedResultName": "WarmUpInbox",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/11wR54Q5uBbIq_59pn1Klk0L6ddWZZfN6ERBqLMYkTr4/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 1250715471,
+          "mode": "list",
+          "cachedResultName": "Sheet2",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/11wR54Q5uBbIq_59pn1Klk0L6ddWZZfN6ERBqLMYkTr4/edit#gid=1250715471"
+        },
+        "filtersUI": {
+          "values": [
+            {
+              "lookupColumn": "Status",
+              "lookupValue": "Ok"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        512,
+        1536
+      ],
+      "id": "7c935d76-4817-47e4-b0c4-3f0507dea5c7",
+      "name": "Get row(s) in sheet4",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "49vtSxmzdUHWW3OF",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 3,
+      "position": [
+        976,
+        1536
+      ],
+      "id": "42d872c1-8672-4b6c-a2e6-8b7181350ca0",
+      "name": "Loop Over Items4"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "fb2c06c8-d85f-4ea3-a2f7-21f7b1a349db",
+              "leftValue": "paused",
+              "rightValue": "={{ $json.status }}",
+              "operator": {
+                "type": "string",
+                "operation": "contains"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        704,
+        1536
+      ],
+      "id": "b37b72c0-a227-4c97-9228-6e8049fa687d",
+      "name": "If1"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "fb2c06c8-d85f-4ea3-a2f7-21f7b1a349db",
+              "leftValue": "running",
+              "rightValue": "={{ $json.status }}",
+              "operator": {
+                "type": "string",
+                "operation": "contains"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        720,
+        1744
+      ],
+      "id": "73db920f-73cc-46a0-9dfd-e1c586e5281b",
+      "name": "If2"
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "11wR54Q5uBbIq_59pn1Klk0L6ddWZZfN6ERBqLMYkTr4",
+          "mode": "list",
+          "cachedResultName": "WarmUpInbox",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/11wR54Q5uBbIq_59pn1Klk0L6ddWZZfN6ERBqLMYkTr4/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 1250715471,
+          "mode": "list",
+          "cachedResultName": "Sheet2",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/11wR54Q5uBbIq_59pn1Klk0L6ddWZZfN6ERBqLMYkTr4/edit#gid=1250715471"
+        },
+        "filtersUI": {
+          "values": [
+            {
+              "lookupColumn": "Status",
+              "lookupValue": "Ok"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        512,
+        1328
+      ],
+      "id": "d6b8e468-34e5-4248-93a4-96c57061b564",
+      "name": "Get row(s) in sheet5",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "49vtSxmzdUHWW3OF",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 3,
+      "position": [
+        768,
+        1328
+      ],
+      "id": "74e1a8ee-0911-4fa0-9ed9-f7b85fdc2aaa",
+      "name": "Loop Over Items5"
+    },
+    {
+      "parameters": {
+        "method": "PUT",
+        "url": "=https://api.warmupinbox.com/v1/inboxes/{{ $json.inbox_id }}",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "accept",
+              "value": "application/json"
+            },
+            {
+              "name": "x-api-key",
+              "value": "={{ $json.Api }}"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"frequency\": {\n    \"starting_baseline\": {{ $json.next_day_send_count }},\n    \"increase_per_day\": {{ $json.daily_increase_rate }},\n    \"max_sends_per_day\": 250,\n    \"reply_rate\": 45,\n    \"strategy\": \"progressive\"\n  }\n} ",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        1264,
+        1328
+      ],
+      "id": "05ad331a-d23d-4a14-923d-5aa67b8c4546",
+      "name": "Update Inbox"
+    }
+  ],
+  "connections": {
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "Switch",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If": {
+      "main": [
+        [
+          {
+            "node": "Stack Url",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Switch": {
+      "main": [
+        [
+          {
+            "node": "Get row",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Get Data",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Add Data",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Limit": {
+      "main": [
+        [
+          {
+            "node": "Send Data",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get Data": {
+      "main": [
+        [
+          {
+            "node": "Limit",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Add Data": {
+      "main": [
+        [
+          {
+            "node": "Respond to Webhook",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get Email": {
+      "main": [
+        [
+          {
+            "node": "If",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Stack Url": {
+      "main": [
+        [
+          {
+            "node": "Send Url",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send Data": {
+      "main": [
+        [
+          {
+            "node": "Append or update row in sheet",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get row": {
+      "main": [
+        [
+          {
+            "node": "Get Email",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Inbox Details": {
+      "main": [
+        [
+          {
+            "node": "Append or update row in sheet2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get row(s) in sheet": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get row(s) in sheet1": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Create Inbox1": {
+      "main": [
+        [
+          {
+            "node": "Append or update row in sheet1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Append or update row in sheet1": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Loop Over Items": {
+      "main": [
+        [],
+        [
+          {
+            "node": "Inbox Details",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Append or update row in sheet2": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Loop Over Items1": {
+      "main": [
+        [],
+        [
+          {
+            "node": "Create Inbox1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get row(s) in sheet2": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Loop Over Items2": {
+      "main": [
+        [],
+        [
+          {
+            "node": "Code in JavaScript",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Append or update row in sheet3": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Inbox Metrics": {
+      "main": [
+        [
+          {
+            "node": "Append or update row in sheet3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code in JavaScript": {
+      "main": [
+        [
+          {
+            "node": "Inbox Metrics",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code in JavaScript1": {
+      "main": [
+        [
+          {
+            "node": "Update Inbox",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Schedule Trigger": {
+      "main": [
+        [
+          {
+            "node": "Get row(s) in sheet2",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Get row(s) in sheet",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Get row(s) in sheet1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "When clicking ‘Execute workflow’": {
+      "main": [
+        [
+          {
+            "node": "Get row(s) in sheet5",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Get row(s) in sheet4",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Get row(s) in sheet3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get row(s) in sheet3": {
+      "main": [
+        [
+          {
+            "node": "If2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Pause Inbox": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Start Inbox": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items4",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Loop Over Items3": {
+      "main": [
+        [],
+        [
+          {
+            "node": "Pause Inbox",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get row(s) in sheet4": {
+      "main": [
+        [
+          {
+            "node": "If1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Loop Over Items4": {
+      "main": [
+        [],
+        [
+          {
+            "node": "Start Inbox",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If1": {
+      "main": [
+        [],
+        [
+          {
+            "node": "Loop Over Items4",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If2": {
+      "main": [
+        [],
+        [
+          {
+            "node": "Loop Over Items3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get row(s) in sheet5": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items5",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Loop Over Items5": {
+      "main": [
+        [],
+        [
+          {
+            "node": "Code in JavaScript1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Update Inbox": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items5",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "pinData": {},
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "d0349d005d2a00e99a9aadea9f3d7eb335f5e941d281fc0df63ebd42000a016c"
+  }
+}
