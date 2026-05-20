@@ -1,0 +1,943 @@
+{
+  "nodes": [
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "POST\n/v1/inboxes\nCreate inbox\n---------------------------------------------\nCreate an Inbox\nThis endpoint allows you to create a new inbox with basic configurations.\n\nRequest Body:\nemail: The email address you want to create the inbox for. (e.g., test@gmail.com)\npassword: The password for the inbox. (e.g., xyzqwert123)\nsender_first: First name of the sender. (e.g., Samuel)\nsender_last: Last name of the sender. (e.g., Jackson)\nplan: Type of subscription plan for the inbox. Options include: basic, pro, max, send_only, monitoring.\nfrequency: Defines the email warm-up process, with properties like starting_baseline, increase_per_day, max_sends_per_day, reply_rate.\ntimezone (optional, Pro/Max only): The IANA timezone identifier for the inbox. (e.g., America/New_York, Europe/London, Asia/Tokyo). If not specified, defaults to Etc/UTC. Requires Pro or Max plan.\nAuto-Configuration of SMTP and IMAP:\nWhen you provide an email and password, the system automatically configures the SMTP and IMAP settings based on the MX record of the email domain.\nThis auto-configuration is suitable for most users and simplifies the setup process.\nAdvanced Configuration:\nIf you need to specify different passwords for SMTP and IMAP, or if you want to configure SMTP and IMAP settings directly, use the advanced creation endpoint: /inboxes/advanced (POST).\nThe advanced endpoint allows for more granular control over the SMTP and IMAP configurations.\nNotes:\nInbox Type: Only smtp_imap inboxes are supported. OAuth inboxes are not supported via this API.\nEnsure all required fields are provided to avoid a Bad Request error.\nHandle error responses appropriately, including 401 Unauthorized, 403 Forbidden (e.g., a free user trying to create a pro inbox), or 409 Conflict (e.g., inbox already in use).\nParameters\nTry it out\nNo parameters\n\nRequest body\n\napplication/json\nExample Value\nSchema\n{\n  \"email\": \"test@gmail.com\",\n  \"password\": \"xyzqwert123\",\n  \"sender_first\": \"Samuel\",\n  \"sender_last\": \"Jackson\",\n  \"plan\": \"basic\",\n  \"frequency\": {\n    \"starting_baseline\": 0,\n    \"increase_per_day\": 2,\n    \"max_sends_per_day\": 75,\n    \"reply_rate\": 30\n  },\n  \"timezone\": \"America/New_York\"\n}\nResponses\nCode\tDescription\tLinks\n201\t\nSuccessfully created inbox.\n\nMedia type\n\napplication/json\nControls Accept header.\nExample Value\nSchema\n{\n  \"code\": \"created\",\n  \"inbox_id\": \"inbox_gnl2ZEFDY850oJ4o\",\n  \"details\": \"The inbox was successfully created.\",\n  \"isThisFirstOne\": true\n}\nNo links\n400\t\nBad Request\n\nMedia type\n\napplication/json\nExample Value\nSchema\n{\n  \"statusCode\": 400,\n  \"message\": \"smtp_imap inboxes must have the smtp object.\",\n  \"error\": \"Bad Request\"\n}\nNo links\n401\t\nError: Unauthorized\n\nMedia type\n\napplication/json\nExample Value\nSchema\n{\n  \"statusCode\": 401,\n  \"message\": \"Invalid api key\",\n  \"error\": \"Unauthorized\"\n}\nNo links\n403\t\nForbidden\n\nMedia type\n\napplication/json\nExample Value\nSchema\n{\n  \"statusCode\": 403,\n  \"message\": \"Free user is not allowed to create a max inbox\",\n  \"error\": \"Forbidden\"\n}\nNo links\n409\t\nConflict\n\nMedia type\n\napplication/json\nExample Value\nSchema\n{\n  \"statusCode\": 409,\n  \"message\": \"Inbox is already in use\",\n  \"error\": \"Conflict\"\n}\nNo links\n429\t\nError: Too Many Requests\n\nMedia type\n\napplication/json\nExample Value\nSchema\n{\n  \"statusCode\": 429,\n  \"message\": \"Too Many Requests\",\n  \"error\": \"Too Many Requests\"\n}\nNo links\n\nGET\n/v1/inboxes/{id}\nGet inbox details\n-------------------------------------------------------------\nGet Inbox Details\nThis endpoint allows you to retrieve detailed information for a specific inbox.\n\nInbox Details:\ninbox_id: The unique ID of the inbox. (e.g., inbox_GM5i7HCSJ9bMN10O)\nstatus: Current status of the inbox. (e.g., paused)\ntype: Type of the inbox. (e.g., smtp_imap)\nemail: Email address linked with the inbox. (e.g., example@example.com)\nfilter_id: (DEPRECATED - no longer used, see identifier instead) Previously appeared in email subjects. Maintained for backward compatibility only.\nidentifier: The unique 8-digit identifier that appears in the email body as a phone-like number. Use this to filter emails from our network. (e.g., 12345678)\nscore: Landing score of the inbox indicating its health. (e.g., 98)\ncreated_at: Timestamp of when the inbox was created. (e.g., 1646248718)\nfrequency: Object detailing the email warm-up process.\nstarting_baseline: Initial number of emails sent on day one. (e.g., 20)\nincrease_per_day: Daily increment of sent emails. (e.g., 4)\nmax_sends_per_day: Maximum emails that can be sent daily. (e.g., 50)\nreply_rate: Desired percentage of received replies. (e.g., 50)\nlast_sends_per_day: Number of emails sent the previous day. (e.g., 24)\nstrategy: Strategy used for the warm-up process. (e.g., progressive)\nreputation: Object detailing the reputation scores.\nscore: Overall reputation score. (e.g., 98)\nscore_google: Reputation score for Google. (e.g., 100)\nscore_microsoft: Reputation score for Microsoft. (e.g., 95)\nscore_all_other: Reputation score for other providers. (e.g., 97)\nplan: Type of subscription plan for the inbox. This can be one of the following: basic, pro, max, send_only, monitoring.\nemail_topics: We use artificial intelligence to generate message content that is unrecognisable from what a human would write. This array contains the topics that are used to generate the content. (e.g., [\"Affiliate Offers\", \"Real Estate\"])\nschedule: Object detailing the sending schedule for each day of the week. Each day has a start and end time in hours. (e.g., Monday's schedule: 9:00 to 17:00)\ntimezone: The timezone set for the inbox. (e.g., Etc/UTC)\nlanguage: The language of warmup emails set for the inbox. (e.g., english). This can be one of the following: english, german, french, spanish, polish, italian, dutch, danish, finnish, portuguese, slovak, russian, swedish, norwegian, turkish, indonesian, ukrainian, romanian, czech, hungarian, malay, bulgarian, serbian.\nesp_priority: The priority of the inbox for different email service providers. This object has the following properties:\ngoogle: Is Google ESP in priority. (e.g., true)\noutlook: Is Outlook ESP in priority. (e.g., false)\nall_other: Are all other ESPs in priority. (e.g., false)\nextended_reply: Determines if warm-up email replies should include previous message history (e.g., true). When enabled, replies mimic natural email conversation patterns by including the original message content.\nhealth_check: Object containing inbox health check information with scores and timestamps.\nmx: MX records configuration with score (0-1), last check timestamp, and array of MX records.\nspf: SPF record configuration with score (0-1), last check timestamp, and record value.\ndmarc: DMARC record configuration with score (0-1), last check timestamp, and record value.\ndomain_blacklists: Blacklist check results with score (0-1), last check timestamp, and array of blacklist results.\nwarmup_days: Warmup progress with score (0-1), last check timestamp, and number of warmup days.\nNotes:\nAlways ensure you're querying the right inbox by its inbox_id.\nThe response provides a comprehensive overview of the inbox, including its frequency, reputation, schedule, and more.\nHealth check scores range from 0 to 1, where 1 indicates optimal configuration.\nlast_check_at timestamps are in ISO 8601 format and indicate when each check was last performed.\nParameters\nTry it out\nName\tDescription\nid *\nstring\n(path)\nID of the inbox\n\nExample : inbox_GM5i7HCSJ9bMN10O\n\ninbox_PA4kMVkvl\nResponses\nCurl\n\ncurl -X 'GET' \\\n  'https://api.warmupinbox.com/v1/inboxes/inbox_PA4kMVkvl' \\\n  -H 'accept: application/json' \\\n  -H 'x-api-key: ac78f6953b9486ff2eacecab7d9ff7d7ccdd3edcb88b0c7c73c4fd56f0b42744'\nRequest URL\nhttps://api.warmupinbox.com/v1/inboxes/inbox_PA4kMVkvl\nServer response\nCode\tDetails\n200\t\nResponse body\nDownload\n{\n  \"inbox_id\": \"inbox_PA4kMVkvl\",\n  \"status\": \"running\",\n  \"type\": \"smtp_imap\",\n  \"email\": \"mahfuzhassan4672+work@gmail.com\",\n  \"filter_id\": \"B889767\",\n  \"identifier\": \"50905273\",\n  \"score\": 100,\n  \"sender_first\": \"M5\",\n  \"sender_last\": \"work\",\n  \"created_at\": 1777836452,\n  \"frequency\": {\n    \"starting_baseline\": 4,\n    \"increase_per_day\": 12,\n    \"max_sends_per_day\": 250,\n    \"reply_rate\": 45,\n    \"strategy\": \"progressive\",\n    \"last_sends_per_day\": 45\n  },\n  \"reputation\": {\n    \"score\": 100,\n    \"score_google\": 100,\n    \"score_microsoft\": 0,\n    \"score_all_other\": 100\n  },\n  \"plan\": \"pro\",\n  \"email_topics\": [],\n  \"language\": \"english\",\n  \"timezone\": \"Etc/UTC\",\n  \"schedule\": {\n    \"mon\": {\n      \"start\": 0,\n      \"end\": 24\n    },\n    \"tue\": {\n      \"start\": 0,\n      \"end\": 24\n    },\n    \"wed\": {\n      \"start\": 0,\n      \"end\": 24\n    },\n    \"thu\": {\n      \"start\": 0,\n      \"end\": 24\n    },\n    \"fri\": {\n      \"start\": 0,\n      \"end\": 24\n    },\n    \"sat\": {\n      \"start\": 0,\n      \"end\": 24\n    },\n    \"sun\": {\n      \"start\": 0,\n      \"end\": 24\n    }\n  },\n  \"esp_priority\": {\n    \"google\": false,\n    \"outlook\": false,\n    \"all_other\": false\n  },\n  \"extended_reply\": true,\n  \"health_check\": {\n    \"mx\": {\n      \"score\": 1,\n      \"last_check_at\": \"2026-05-09T03:07:47.962Z\",\n      \"mx_records\": [\n        {\n          \"priority\": 20,\n          \"hostname\": \"alt2.gmail-smtp-in.l.google.com\",\n          \"address\": \"172.253.116.27\",\n          \"ttl\": 179\n        },\n        {\n          \"priority\": 30,\n          \"hostname\": \"alt3.gmail-smtp-in.l.google.com\",\n          \"address\": \"192.178.223.26\",\n          \"ttl\": 74\n        },\n        {\n          \"priority\": 5,\n          \"hostname\": \"gmail-smtp-in.l.google.com\",\n          \"address\": \"142.251.163.27\",\n          \"ttl\": 194\n        },\n        {\n          \"priority\": 10,\n          \"hostname\": \"alt1.gmail-smtp-in.l.google.com\",\n          \"address\": \"108.177.123.27\",\n          \"ttl\": 195\n        },\n        {\n          \"priority\": 40,\n          \"hostname\": \"alt4.gmail-smtp-in.l.google.com\",\n          \"address\": \"173.194.76.26\",\n          \"ttl\": 54\n        }\n      ]\n    },\n    \"spf\": {\n      \"score\": 1,\n      \"last_check_at\": \"2026-05-09T03:07:47.949Z\",\n      \"value\": \"v=spf1 redirect=_spf.google.com\"\n    },\n    \"dmarc\": {\n      \"score\": 1,\n      \"last_check_at\": \"2026-05-09T03:07:47.950Z\",\n      \"value\": \"v=DMARC1;p=none;sp=quarantine;rua=mailto:mailauth-reports@google.com\"\n    },\n    \"domain_blacklists\": {\n      \"score\": 1,\n      \"last_check_at\": \"2026-05-09T03:07:47.948Z\",\n      \"blacklists\": [\n        {\n          \"name\": \"dbl.spamhaus.org\",\n          \"url\": \"https://www.spamhaus.org/dbl/\",\n          \"detected\": false\n        },\n        {\n          \"name\": \"0spamurl.fusionzero.com\",\n          \"url\": \"https://www.fusionzero.com/\",\n          \"detected\": false\n        },\n        {\n          \"name\": \"bl.fmb.la\",\n          \"url\": \"https://www.fmb.la/surbl/\",\n          \"detected\": false\n        },\n        {\n          \"name\": \"bl.rbl.scrolloutf1.com\",\n          \"url\": \"https://www.scrolloutf1.com/\",\n          \"detected\": false\n        },\n        {\n          \"name\": \"black.uribl.com\",\n          \"url\": \"https://uribl.com/\",\n          \"detected\": false\n        },\n        {\n          \"name\": \"blacklist.netcore.co.in\",\n          \"url\": \"https://www.netcore.co.in/\",\n          \"detected\": false\n        },\n        {\n          \"name\": \"bsb.spamlookup.net\",\n          \"url\": \"https://www.spamlookup.net/\",\n          \"detected\": false\n        },\n        {\n          \"name\": \"dbl.suomispam.net\",\n          \"url\": \"https://suomispam.net/\",\n          \"detected\": false\n        },\n        {\n          \"name\": \"dbl.tiopan.com\",\n          \"url\": \"https://www.tiopan.com/\",\n          \"detected\": false\n        },\n        {\n          \"name\": \"dblack.mail.abusix.zone\",\n          \"url\": \"https://www.abusix.com/\",\n          \"detected\": false\n        },\n        {\n          \"name\": \"dnsbl.spfbl.net\",\n          \"url\": \"https://spfbl.net/\",\n          \"detected\": false\n        },\n        {\n          \"name\": \"hostkarma.junkemailfilter.com\",\n          \"url\": \"https://www.junkemailfilter.com/\",\n          \"detected\": false\n        },\n        {\n          \"name\": \"invaluement URI\",\n          \"url\": \"https://www.invaluement.com/removal/\",\n          \"detected\": false\n        },\n        {\n          \"name\": \"multi.surbl.org\",\n          \"url\": \"http://www.surbl.org/surbl-analysis\",\n          \"detected\": false\n        },\n        {\n          \"name\": \"NordSpam\",\n          \"url\": \"https://www.nordspam.com/\",\n          \"detected\": false\n        },\n        {\n          \"name\": \"nsbl.fmb.la\",\n          \"url\": \"https://www.fmb.la/surbl/\",\n          \"detected\": false\n        },\n        {\n          \"name\": \"PhishTank\",\n          \"url\": \"https://www.phishtank.com/\",\n          \"detected\": false\n        },\n        {\n          \"name\": \"rhsbl.scientificspam.net\",\n          \"url\": \"https://www.scientificspam.net/\",\n          \"detected\": false\n        },\n        {\n          \"name\": \"rhsbl.zapbl.net\",\n          \"url\": \"https://www.zapbl.net/\",\n          \"detected\": false\n        },\n        {\n          \"name\": \"short.fmb.la\",\n          \"url\": \"https://www.fmb.la/surbl/\",\n          \"detected\": false\n        },\n        {\n          \"name\": \"uribl.abuse.ro\",\n          \"url\": \"http://abuse.ro/\",\n          \"detected\": false\n        },\n        {\n          \"name\": \"uribl.pofon.foobar.hu\",\n          \"url\": \"https://www.pofon.com/\",\n          \"detected\": false\n        },\n        {\n          \"name\": \"uribl.spameatingmonkey.net\",\n          \"url\": \"https://spameatingmonkey.com/\",\n          \"detected\": false\n        },\n        {\n          \"name\": \"uribl.swinog.ch\",\n          \"url\": \"https://antispam.swinog.ch/\",\n          \"detected\": false\n        }\n      ]\n    },\n    \"warmup_days\": {\n      \"score\": 0,\n      \"last_check_at\": \"2026-05-09T03:07:47.912Z\",\n      \"warmup_days\": 5\n    }\n  }\n}\nResponse headers\n access-control-allow-origin: * \n content-length: 3762 \n content-type: application/json; charset=utf-8 \n date: Sat,09 May 2026 23:57:05 GMT \n etag: W/\"eb2-yhejxSx9f7xVUsEy1reTxTiteg0\" \n x-powered-by: Express \nResponses\nCode\tDescription\tLinks\n200\t\nMedia type\n\napplication/json\nControls Accept header.\nExample Value\nSchema\n{\n  \"inbox_id\": \"inbox_GM5i7HCSJ9bMN10O\",\n  \"status\": \"paused\",\n  \"type\": \"smtp_imap\",\n  \"email\": \"example@example.com\",\n  \"identifier\": \"12345678\",\n  \"score\": 98,\n  \"sender_first\": \"John\",\n  \"sender_last\": \"Doe\",\n  \"created_at\": 1646248718,\n  \"frequency\": {\n    \"starting_baseline\": 20,\n    \"increase_per_day\": 4,\n    \"max_sends_per_day\": 50,\n    \"reply_rate\": 50,\n    \"last_sends_per_day\": 24,\n    \"strategy\": \"progressive\"\n  },\n  \"reputation\": {\n    \"score\": 98,\n    \"score_google\": 100,\n    \"score_microsoft\": 95,\n    \"score_all_other\": 97\n  },\n  \"plan\": \"basic\",\n  \"email_topics\": [\n    \"Real Estate\",\n    \"Affiliate Offers\"\n  ],\n  \"schedule\": {\n    \"mon\": {\n      \"start\": 9,\n      \"end\": 17\n    },\n    \"tue\": {\n      \"start\": 9,\n      \"end\": 17\n    },\n    \"wed\": {\n      \"start\": 9,\n      \"end\": 17\n    },\n    \"thu\": {\n      \"start\": 9,\n      \"end\": 17\n    },\n    \"fri\": {\n      \"start\": 9,\n      \"end\": 17\n    },\n    \"sat\": {\n      \"start\": 9,\n      \"end\": 17\n    },\n    \"sun\": {\n      \"start\": 9,\n      \"end\": 17\n    }\n  },\n  \"timezone\": \"Etc/UTC\",\n  \"language\": \"english\",\n  \"esp_priority\": {\n    \"google\": false,\n    \"outlook\": false,\n    \"all_other\": false\n  },\n  \"extended_reply\": true,\n  \"health_check\": {\n    \"mx\": {\n      \"score\": 1,\n      \"last_check_at\": \"2025-06-02T02:33:53.933Z\",\n      \"mx_records\": [\n        {\n          \"priority\": 1,\n          \"hostname\": \"aspmx.l.google.com\",\n          \"address\": \"142.251.167.26\",\n          \"ttl\": 231\n        }\n      ]\n    },\n    \"spf\": {\n      \"score\": 1,\n      \"last_check_at\": \"2025-06-01T04:01:10.408Z\",\n      \"value\": \"v=spf1 a mx include:_spf.google.com -all\"\n    },\n    \"dmarc\": {\n      \"score\": 1,\n      \"last_check_at\": \"2025-06-01T04:01:10.539Z\",\n      \"value\": \"v=DMARC1;p=quarantine;rua=mailto:example@domain.com\"\n    },\n    \"domain_blacklists\": {\n      \"score\": 1,\n      \"last_check_at\": \"2025-06-01T04:01:10.396Z\",\n      \"blacklists\": [\n        {\n          \"name\": \"PhishTank\",\n          \"url\": \"https://www.phishtank.com/\",\n          \"detected\": false\n        }\n      ]\n    },\n    \"warmup_days\": {\n      \"score\": 0.1,\n      \"last_check_at\": \"2025-06-02T02:33:53.891Z\",\n      \"warmup_days\": 79\n    }\n  }\n}\nNo links\n401\t\nError: Unauthorized\n\nMedia type\n\napplication/json\nExample Value\nSchema\n{\n  \"statusCode\": 401,\n  \"message\": \"Invalid api key\",\n  \"error\": \"Unauthorized\"\n}\nNo links\n404\t\nError: Not Found\n\nMedia type\n\napplication/json\nExample Value\nSchema\n{\n  \"statusCode\": 404,\n  \"message\": \"Inbox was not found\",\n  \"error\": \"Not Found\"\n}\nNo links\n429\t\nError: Too Many Requests\n\nMedia type\n\napplication/json\nExample Value\nSchema\n{\n  \"statusCode\": 429,\n  \"message\": \"Too Many Requests\",\n  \"error\": \"Too Many Requests\"\n}\nNo links\n\nDELETE\n/v1/inboxes/{id}\nDelete inbox\n------------------------------------------------------\nDelete Inbox\nThis endpoint allows you to permanently delete a specific inbox based on its unique ID.\n\nNotes:\nOnce an inbox is deleted, all associated data and records are permanently removed and cannot be recovered. Always double-check the inbox ID and think carefully before initiating a delete operation.\nEnsure your API key is set in the headers for authorization and has the required permissions for the delete action.\nIt's a good practice to first retrieve the inbox details (using the Get Inbox Details route) before deleting to confirm you're removing the correct inbox.\nParameters\nTry it out\nName\tDescription\nid *\nstring\n(path)\n69ffbcaa328ec3d15088c879\nResponses\nCurl\n\ncurl -X 'DELETE' \\\n  'https://api.warmupinbox.com/v1/inboxes/69ffbcaa328ec3d15088c879' \\\n  -H 'accept: */*' \\\n  -H 'x-api-key: ac78f6953b9486ff2eacecab7d9ff7d7ccdd3edcb88b0c7c73c4fd56f0b42744'\nRequest URL\nhttps://api.warmupinbox.com/v1/inboxes/69ffbcaa328ec3d15088c879\nServer response\nCode\tDetails\n404\t\nError: response status is 404\n\nResponse body\nDownload\n{\n  \"statusCode\": 404,\n  \"message\": \"Inbox was not found.\",\n  \"error\": \"Not Found\"\n}\nResponse headers\n access-control-allow-origin: * \n content-length: 71 \n content-type: application/json; charset=utf-8 \n date: Sun,10 May 2026 00:20:59 GMT \n etag: W/\"47-UAEHCLFlNHgFo/EHI3gj4EpuGaY\" \n x-powered-by: Express \nResponses\nCode\tDescription\tLinks\n200\t\nInbox successfully deleted.\n\nNo links\n401\t\nError: Unauthorized\n\nMedia type\n\napplication/json\nExample Value\nSchema\n{\n  \"statusCode\": 401,\n  \"message\": \"Invalid api key\",\n  \"error\": \"Unauthorized\"\n}\nNo links\n404\t\nError: Not Found\n\nMedia type\n\napplication/json\nExample Value\nSchema\n{\n  \"statusCode\": 404,\n  \"message\": \"Inbox was not found\",\n  \"error\": \"Not Found\"\n}\nNo links\n409\t\nConflict\n\nMedia type\n\napplication/json\nExample Value\nSchema\n{\n  \"statusCode\": 409,\n  \"message\": \"You can not delete a running inbox, you must pause the inbox first.\",\n  \"error\": \"Conflict\"\n}\nNo links\n429\t\nError: Too Many Requests\n\nMedia type\n\napplication/json\nExample Value\nSchema\n{\n  \"statusCode\": 429,\n  \"message\": \"Too Many Requests\",\n  \"error\": \"Too Many Requests\"\n}\nNo links\n503\t\nService Unavailable\n\nMedia type\n\napplication/json\nExample Value\nSchema\n{\n  \"statusCode\": 503,\n  \"message\": \"Sending schedule is being rebuilt, please try to delete your inbox later\",\n  \"error\": \"Service Unavailable\"\n}\n",
+        "options": {
+          "systemMessage": "You are a helpful assistant"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3.1,
+      "position": [
+        -1968,
+        432
+      ],
+      "id": "3460bd16-417f-4920-b649-098a2fad301d",
+      "name": "AI Agent"
+    },
+    {
+      "parameters": {
+        "url": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('URL', ``, 'string') }}",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "accept",
+              "value": "application/json"
+            },
+            {
+              "name": "x-api-key",
+              "value": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('parameters1_Value', ``, 'string') }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequestTool",
+      "typeVersion": 4.4,
+      "position": [
+        -1728,
+        1488
+      ],
+      "id": "db044858-bd2d-4ed7-a2b7-581e00688db3",
+      "name": "Inbox Details1"
+    },
+    {
+      "parameters": {
+        "method": "DELETE",
+        "url": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('URL', ``, 'string') }}",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "accept",
+              "value": "*/*"
+            },
+            {
+              "name": "x-api-key",
+              "value": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('parameters1_Value', ``, 'string') }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequestTool",
+      "typeVersion": 4.4,
+      "position": [
+        -1392,
+        1456
+      ],
+      "id": "6c2b6942-8c24-48f3-b90e-2b12dc8be3b9",
+      "name": "Delete Inbox1"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.warmupinbox.com/v1/inboxes",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "accept",
+              "value": "application/json"
+            },
+            {
+              "name": "x-api-key",
+              "value": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('parameters1_Value', ``, 'string') }}"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('JSON', ``, 'json') }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequestTool",
+      "typeVersion": 4.4,
+      "position": [
+        -2224,
+        1440
+      ],
+      "id": "5ee44711-e43c-4cec-aa02-641ab5950bff",
+      "name": "Create Inbox"
+    },
+    {
+      "parameters": {},
+      "type": "@n8n/n8n-nodes-langchain.memoryBufferWindow",
+      "typeVersion": 1.3,
+      "position": [
+        -1936,
+        720
+      ],
+      "id": "157baed2-e835-40b0-8a38-b9c4625d82e4",
+      "name": "Simple Memory"
+    },
+    {
+      "parameters": {
+        "operation": "appendOrUpdate",
+        "documentId": {
+          "__rl": true,
+          "value": "11wR54Q5uBbIq_59pn1Klk0L6ddWZZfN6ERBqLMYkTr4",
+          "mode": "list",
+          "cachedResultName": "WarmUpInbox",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/11wR54Q5uBbIq_59pn1Klk0L6ddWZZfN6ERBqLMYkTr4/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Sheet1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/11wR54Q5uBbIq_59pn1Klk0L6ddWZZfN6ERBqLMYkTr4/edit#gid=0"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "inbox_id": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('inbox_id', ``, 'string') }}",
+            "status": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('status', ``, 'string') }}",
+            "filter_id": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('filter_id', ``, 'string') }}",
+            "identifier": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('identifier', ``, 'string') }}",
+            "score": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('score', ``, 'string') }}",
+            "created_at": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('created_at', ``, 'string') }}",
+            "starting_baseline": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('starting_baseline', ``, 'string') }}",
+            "increase_per_day": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('increase_per_day', ``, 'string') }}",
+            "max_sends_per_day": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('max_sends_per_day', ``, 'string') }}",
+            "reply_rate": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('reply_rate', ``, 'string') }}",
+            "mx_last_check_at": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('mx_last_check_at', ``, 'string') }}",
+            "last_sends_per_day": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('last_sends_per_day', ``, 'string') }}",
+            "reputation_score": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('reputation_score', ``, 'string') }}",
+            "score_google": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('score_google', ``, 'string') }}",
+            "score_microsoft": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('score_microsoft', ``, 'string') }}",
+            "score_all_other": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('score_all_other', ``, 'string') }}",
+            "strategy": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('strategy', ``, 'string') }}",
+            "extended_reply": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('extended_reply', ``, 'string') }}",
+            "esp_google": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('esp_google', ``, 'string') }}",
+            "esp_outlook": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('esp_outlook', ``, 'string') }}",
+            "esp_all_other": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('esp_all_other', ``, 'string') }}",
+            "mx_score": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('mx_score', ``, 'string') }}",
+            "plan": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('plan', ``, 'string') }}",
+            "language": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('language', ``, 'string') }}",
+            "timezone": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('timezone', ``, 'string') }}",
+            "type": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('type', ``, 'string') }}"
+          },
+          "matchingColumns": [
+            "inbox_id"
+          ],
+          "schema": [
+            {
+              "id": "inbox_id",
+              "displayName": "inbox_id",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "status",
+              "displayName": "status",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "score",
+              "displayName": "score",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "filter_id",
+              "displayName": "filter_id",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "identifier",
+              "displayName": "identifier",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "created_at",
+              "displayName": "created_at",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "starting_baseline",
+              "displayName": "starting_baseline",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "increase_per_day",
+              "displayName": "increase_per_day",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "max_sends_per_day",
+              "displayName": "max_sends_per_day",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "reply_rate",
+              "displayName": "reply_rate",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "mx_last_check_at",
+              "displayName": "mx_last_check_at",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "last_sends_per_day",
+              "displayName": "last_sends_per_day",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "reputation_score",
+              "displayName": "reputation_score",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "score_google",
+              "displayName": "score_google",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "score_microsoft",
+              "displayName": "score_microsoft",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "score_all_other",
+              "displayName": "score_all_other",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "strategy",
+              "displayName": "strategy",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "extended_reply",
+              "displayName": "extended_reply",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "esp_google",
+              "displayName": "esp_google",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "esp_outlook",
+              "displayName": "esp_outlook",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "esp_all_other",
+              "displayName": "esp_all_other",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "mx_score",
+              "displayName": "mx_score",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "plan",
+              "displayName": "plan",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "language",
+              "displayName": "language",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "timezone",
+              "displayName": "timezone",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "type",
+              "displayName": "type",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheetsTool",
+      "typeVersion": 4.7,
+      "position": [
+        -1808,
+        720
+      ],
+      "id": "76e19657-7322-4654-9a9c-99b33dc408c0",
+      "name": "Sheet1",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "3Xft7Ct7HQVTOB46",
+          "name": "Google Sheets OAuth2 API"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "appendOrUpdate",
+        "documentId": {
+          "__rl": true,
+          "value": "11wR54Q5uBbIq_59pn1Klk0L6ddWZZfN6ERBqLMYkTr4",
+          "mode": "list",
+          "cachedResultName": "WarmUpInbox",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/11wR54Q5uBbIq_59pn1Klk0L6ddWZZfN6ERBqLMYkTr4/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 1250715471,
+          "mode": "list",
+          "cachedResultName": "Sheet2",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/11wR54Q5uBbIq_59pn1Klk0L6ddWZZfN6ERBqLMYkTr4/edit#gid=1250715471"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "inbox_id": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('inbox_id', ``, 'string') }}",
+            "Login": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Login', ``, 'string') }}",
+            "Sender_First": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Sender_First', ``, 'string') }}",
+            "Sender_Last": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Sender_Last', ``, 'string') }}",
+            "Labe": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Labe', ``, 'string') }}",
+            "Email": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Email', ``, 'string') }}",
+            "App Password": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('App_Password', ``, 'string') }}",
+            "Api": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Api', ``, 'string') }}"
+          },
+          "matchingColumns": [
+            "inbox_id"
+          ],
+          "schema": [
+            {
+              "id": "Login",
+              "displayName": "Login",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Sender_First",
+              "displayName": "Sender_First",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Sender_Last",
+              "displayName": "Sender_Last",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "inbox_id",
+              "displayName": "inbox_id",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Labe",
+              "displayName": "Labe",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Email",
+              "displayName": "Email",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "App Password",
+              "displayName": "App Password",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Api",
+              "displayName": "Api",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheetsTool",
+      "typeVersion": 4.7,
+      "position": [
+        -1648,
+        720
+      ],
+      "id": "06895995-3ca8-4c63-ac01-b227a64ac574",
+      "name": "Sheet 2",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "3Xft7Ct7HQVTOB46",
+          "name": "Google Sheets OAuth2 API"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "mode": "list",
+          "value": "gpt-5-mini"
+        },
+        "builtInTools": {},
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1.3,
+      "position": [
+        -2096,
+        720
+      ],
+      "id": "459d7109-b6f0-4f8d-9139-e99688d15a68",
+      "name": "OpenAI Chat Model",
+      "credentials": {
+        "openAiApi": {
+          "id": "9Ul09MemqLfQLlZS",
+          "name": "n8n free OpenAI API credits"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.agentTool",
+      "typeVersion": 3,
+      "position": [
+        -2368,
+        992
+      ],
+      "id": "21a485be-b024-4b96-9f97-bc4882a691cf",
+      "name": "Create Inbox Agent Tool"
+    },
+    {
+      "parameters": {
+        "options": {
+          "systemMessage": "You are a helpful assistant"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agentTool",
+      "typeVersion": 3,
+      "position": [
+        -1600,
+        992
+      ],
+      "id": "4eadc325-b183-409b-97ba-1fc3b8afcc68",
+      "name": "Delete Inbox Agent Tool"
+    },
+    {
+      "parameters": {
+        "options": {
+          "systemMessage": "You are a helpful assistant"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agentTool",
+      "typeVersion": 3,
+      "position": [
+        -1984,
+        992
+      ],
+      "id": "186a2bcd-2c62-461b-a001-128d38518e75",
+      "name": "Inbox Details Agent tool"
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "mode": "list",
+          "value": "gpt-5-mini"
+        },
+        "builtInTools": {},
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1.3,
+      "position": [
+        -1600,
+        1232
+      ],
+      "id": "3fb9218b-7cdb-445e-9b37-b37798064bff",
+      "name": "OpenAI 1",
+      "credentials": {
+        "openAiApi": {
+          "id": "9Ul09MemqLfQLlZS",
+          "name": "n8n free OpenAI API credits"
+        }
+      }
+    },
+    {
+      "parameters": {},
+      "type": "@n8n/n8n-nodes-langchain.memoryBufferWindow",
+      "typeVersion": 1.3,
+      "position": [
+        -1504,
+        1232
+      ],
+      "id": "e73aaac0-ebe6-48d7-ae91-a074fbcfae12",
+      "name": "Memory 1"
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "mode": "list",
+          "value": "gpt-5-mini"
+        },
+        "builtInTools": {},
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1.3,
+      "position": [
+        -2048,
+        1248
+      ],
+      "id": "5c436cc2-3005-4836-a01d-09ee1f367045",
+      "name": "OpenAI Chat Model1",
+      "credentials": {
+        "openAiApi": {
+          "id": "9Ul09MemqLfQLlZS",
+          "name": "n8n free OpenAI API credits"
+        }
+      }
+    },
+    {
+      "parameters": {},
+      "type": "@n8n/n8n-nodes-langchain.memoryBufferWindow",
+      "typeVersion": 1.3,
+      "position": [
+        -1888,
+        1248
+      ],
+      "id": "26d6005f-226b-405b-b5fc-638efc3482da",
+      "name": "Simple Memory1"
+    },
+    {
+      "parameters": {},
+      "type": "@n8n/n8n-nodes-langchain.memoryBufferWindow",
+      "typeVersion": 1.3,
+      "position": [
+        -2320,
+        1248
+      ],
+      "id": "8e853ba4-d1b0-4e21-9b78-abbfa9f97eff",
+      "name": "Simple Memory2"
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "mode": "list",
+          "value": "gpt-5-mini"
+        },
+        "builtInTools": {},
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1.3,
+      "position": [
+        -2480,
+        1248
+      ],
+      "id": "053ff0f7-d287-4a21-a04f-3b43e65a093a",
+      "name": "OpenAI Chat Model2",
+      "credentials": {
+        "openAiApi": {
+          "id": "9Ul09MemqLfQLlZS",
+          "name": "n8n free OpenAI API credits"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.chatTrigger",
+      "typeVersion": 1.4,
+      "position": [
+        -2224,
+        432
+      ],
+      "id": "2a4da097-fb69-4655-b611-5fc9913a605c",
+      "name": "When chat message received",
+      "webhookId": "06e52397-81c8-48ca-a9a0-5fbf4d85962b"
+    }
+  ],
+  "connections": {
+    "Inbox Details1": {
+      "ai_tool": [
+        [
+          {
+            "node": "Inbox Details Agent tool",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Delete Inbox1": {
+      "ai_tool": [
+        [
+          {
+            "node": "Delete Inbox Agent Tool",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Create Inbox": {
+      "ai_tool": [
+        [
+          {
+            "node": "Create Inbox Agent Tool",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Simple Memory": {
+      "ai_memory": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_memory",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Sheet1": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Sheet 2": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Create Inbox Agent Tool": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Delete Inbox Agent Tool": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Inbox Details Agent tool": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI 1": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Delete Inbox Agent Tool",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Memory 1": {
+      "ai_memory": [
+        [
+          {
+            "node": "Delete Inbox Agent Tool",
+            "type": "ai_memory",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI Chat Model1": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Inbox Details Agent tool",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Simple Memory1": {
+      "ai_memory": [
+        [
+          {
+            "node": "Inbox Details Agent tool",
+            "type": "ai_memory",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Simple Memory2": {
+      "ai_memory": [
+        [
+          {
+            "node": "Create Inbox Agent Tool",
+            "type": "ai_memory",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI Chat Model2": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Create Inbox Agent Tool",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "When chat message received": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "pinData": {},
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "76d5c9a5083093db6e24ed0eceea48eb18bc823ca2449dd6eae5655502d14cd6"
+  }
+}
