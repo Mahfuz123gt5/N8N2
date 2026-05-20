@@ -1,0 +1,98 @@
+{
+  "nodes": [
+    {
+      "parameters": {
+        "workflowInputs": {
+          "values": [
+            {
+              "name": "url"
+            },
+            {
+              "name": "profile_name"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.executeWorkflowTrigger",
+      "typeVersion": 1.1,
+      "position": [
+        -192,
+        0
+      ],
+      "id": "b66dc8d2-9454-493f-a8d8-cc94f33e49d7",
+      "name": "When Executed by Another Workflow"
+    },
+    {
+      "parameters": {
+        "profileName": "n8n",
+        "saveProfileOnTermination": true,
+        "additionalFields": {}
+      },
+      "type": "n8n-nodes-base.airtop",
+      "typeVersion": 1,
+      "position": [
+        16,
+        0
+      ],
+      "id": "47ccb571-43bc-4c87-b670-ad512c5a45fe",
+      "name": "Create a session",
+      "credentials": {
+        "airtopApi": {
+          "id": "yqCepKVycJzXUQe6",
+          "name": "Airtop account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "resource": "window",
+        "url": "={{ $('When Executed by Another Workflow').item.json.url }}",
+        "getLiveView": true,
+        "additionalFields": {}
+      },
+      "type": "n8n-nodes-base.airtop",
+      "typeVersion": 1,
+      "position": [
+        224,
+        0
+      ],
+      "id": "8cd5b9be-bac6-4408-a7e7-cb14e7d243bf",
+      "name": "Create a window",
+      "credentials": {
+        "airtopApi": {
+          "id": "yqCepKVycJzXUQe6",
+          "name": "Airtop account"
+        }
+      }
+    }
+  ],
+  "connections": {
+    "When Executed by Another Workflow": {
+      "main": [
+        [
+          {
+            "node": "Create a session",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Create a session": {
+      "main": [
+        [
+          {
+            "node": "Create a window",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "pinData": {},
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "76d5c9a5083093db6e24ed0eceea48eb18bc823ca2449dd6eae5655502d14cd6"
+  }
+}
