@@ -1,0 +1,364 @@
+{
+  "nodes": [
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.chatTrigger",
+      "typeVersion": 1.4,
+      "position": [
+        -272,
+        -128
+      ],
+      "id": "899ed291-8ac2-45cf-b50d-1fdc81078a5c",
+      "name": "When chat message received",
+      "webhookId": "0691d789-5f27-486d-b096-8557b0a441b9"
+    },
+    {
+      "parameters": {
+        "options": {
+          "systemMessage": "toke me bangla\nTo create an account on Warmup Inbox using the web agent instructions provided, you can use the following sequence of tool calls. Since I don't have your specific personal details (like your name or preferred email), I have used placeholders in brackets that you should fill in.\n\nStep 1: Initialize the Browser\nStart_Browser()\n\nAction: This will provide the sessionId and windowId needed for the next steps.\n\nStep 2: Load the Signup Page\nLoad URL(sessionId, windowId, \"https://app.warmupinbox.com/signup\")\n\nStep 3: Fill in the Registration Details\nFirst Name: Type(sessionId, windowId, \"[ruhoms]\")\nLast Name: Type(sessionId, windowId, \"[auto]\")\nEmail: Type(sessionId, windowId, \"[ruhoms06+auto@gmail.com]\")\nPassword: Type(sessionId, windowId, \"[ruhoms06+auto@gmail.com]\")\n\nNote: Ensure it is at least 7 characters long.\n\nStep 4: Submit and Close\nClick(sessionId, windowId, \"Create Account\")\n\nEnd Session(sessionId, windowId)\n\nQuick Tip: If you want to automate the dropdown for \"How did you find out about Warmup Inbox?\", you can add a Click command for that element before the final submission, though it is marked as optional on the form."
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3.1,
+      "position": [
+        -64,
+        -128
+      ],
+      "id": "6ac933d1-fa5d-4a65-aa7a-c58fa99e54a6",
+      "name": "AI Agent"
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "mode": "list",
+          "value": "gpt-5-mini"
+        },
+        "builtInTools": {},
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1.3,
+      "position": [
+        -896,
+        160
+      ],
+      "id": "466fb45b-1b89-413d-8309-72278d787ad6",
+      "name": "OpenAI Chat Model",
+      "credentials": {
+        "openAiApi": {
+          "id": "9Ul09MemqLfQLlZS",
+          "name": "n8n free OpenAI API credits"
+        }
+      }
+    },
+    {
+      "parameters": {},
+      "type": "@n8n/n8n-nodes-langchain.memoryBufferWindow",
+      "typeVersion": 1.3,
+      "position": [
+        -752,
+        160
+      ],
+      "id": "0c29766e-153c-4e6f-9c93-96e028cbf8ee",
+      "name": "Simple Memory"
+    },
+    {
+      "parameters": {},
+      "type": "@n8n/n8n-nodes-langchain.toolThink",
+      "typeVersion": 1.1,
+      "position": [
+        -624,
+        160
+      ],
+      "id": "67ccb848-827c-4979-856c-87c021605cb4",
+      "name": "Think"
+    },
+    {
+      "parameters": {
+        "workflowId": {
+          "__rl": true,
+          "value": "7nxG9vOAz6vwQfTJ",
+          "mode": "list",
+          "cachedResultUrl": "/workflow/7nxG9vOAz6vwQfTJ",
+          "cachedResultName": "Browser"
+        },
+        "workflowInputs": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "profile_name": "n8n",
+            "url": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('url', `url of the website that we are visiting`, 'string') }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "url",
+              "displayName": "url",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string",
+              "removed": false
+            },
+            {
+              "id": "profile_name",
+              "displayName": "profile_name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string",
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.toolWorkflow",
+      "typeVersion": 2.2,
+      "position": [
+        400,
+        368
+      ],
+      "id": "1a74bfd7-724c-4daa-9144-c0a23b56c262",
+      "name": "create Browser"
+    },
+    {
+      "parameters": {
+        "resource": "interaction",
+        "operation": "type",
+        "sessionId": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Session_ID', `the  \"sessionid\" returned by the 'start_browser' tool`, 'string') }}",
+        "windowId": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Window_ID', `the  \"windowid\" returned by the 'start_browser' tool`, 'string') }}",
+        "text": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Text', ``, 'string') }}",
+        "pressEnterKey": true,
+        "elementDescription": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Element_Description', `search bars usually  contain a placeholder that says 'search'`, 'string') }}",
+        "additionalFields": {}
+      },
+      "type": "n8n-nodes-base.airtopTool",
+      "typeVersion": 1,
+      "position": [
+        -432,
+        336
+      ],
+      "id": "e3309899-8bee-4a8f-9c74-e9fd8babab19",
+      "name": "Typing tool",
+      "credentials": {
+        "airtopApi": {
+          "id": "IvqJUF9MkoeMLvzV",
+          "name": "Airtop account 2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "resource": "interaction",
+        "sessionId": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Session_ID', `the  \"sessionid\" returned by the 'start_browser' tool`, 'string') }}",
+        "windowId": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Window_ID', `the  \"windowid\" returned by the 'start_browser' tool`, 'string') }}",
+        "elementDescription": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Element_Description', ``, 'string') }}",
+        "additionalFields": {}
+      },
+      "type": "n8n-nodes-base.airtopTool",
+      "typeVersion": 1,
+      "position": [
+        -272,
+        336
+      ],
+      "id": "08f3bb5d-ccba-4468-9d70-01e82feca116",
+      "name": "Clicking tool",
+      "credentials": {
+        "airtopApi": {
+          "id": "IvqJUF9MkoeMLvzV",
+          "name": "Airtop account 2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "resource": "extraction",
+        "sessionId": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Session_ID', `the  \"sessionid\" returned by the 'start_browser' tool`, 'string') }}",
+        "windowId": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Window_ID', `the  \"windowid\" returned by the 'start_browser' tool`, 'string') }}",
+        "prompt": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Prompt', ``, 'string') }}",
+        "additionalFields": {}
+      },
+      "type": "n8n-nodes-base.airtopTool",
+      "typeVersion": 1,
+      "position": [
+        -112,
+        336
+      ],
+      "id": "09013850-28ca-45cb-834d-4f3a8e00f423",
+      "name": "Query tool",
+      "credentials": {
+        "airtopApi": {
+          "id": "IvqJUF9MkoeMLvzV",
+          "name": "Airtop account 2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "resource": "window",
+        "operation": "load",
+        "sessionId": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Session_ID', `the  \"sessionid\" returned by the 'start_browser' tool`, 'string') }}",
+        "windowId": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Window_ID', `the  \"windowid\" returned by the 'start_browser' tool`, 'string') }}",
+        "url": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('URL', ``, 'string') }}",
+        "additionalFields": {}
+      },
+      "type": "n8n-nodes-base.airtopTool",
+      "typeVersion": 1,
+      "position": [
+        48,
+        352
+      ],
+      "id": "36b6ee9c-6f01-41df-a0a1-7f8ef40959d3",
+      "name": "Load url tool",
+      "credentials": {
+        "airtopApi": {
+          "id": "IvqJUF9MkoeMLvzV",
+          "name": "Airtop account 2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "terminate",
+        "sessionId": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Session_ID', `the  \"sessionid\" returned by the 'start_browser' tool`, 'string') }}"
+      },
+      "type": "n8n-nodes-base.airtopTool",
+      "typeVersion": 1,
+      "position": [
+        208,
+        368
+      ],
+      "id": "c29d9f05-c0c3-4f86-8455-a524a2a4196d",
+      "name": "Terminate tool",
+      "credentials": {
+        "airtopApi": {
+          "id": "IvqJUF9MkoeMLvzV",
+          "name": "Airtop account 2"
+        }
+      }
+    }
+  ],
+  "connections": {
+    "When chat message received": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Simple Memory": {
+      "ai_memory": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_memory",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Think": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "create Browser": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Typing tool": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Clicking tool": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Query tool": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Load url tool": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Terminate tool": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "pinData": {},
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "76d5c9a5083093db6e24ed0eceea48eb18bc823ca2449dd6eae5655502d14cd6"
+  }
+}
